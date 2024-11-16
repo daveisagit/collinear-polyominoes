@@ -1,7 +1,8 @@
 {
     "cSpell.words": [
         "polyomino",
-        "polyominoes"
+        "polyominoes",
+        "Polyonimoes"
     ],
     "terminal.integrated.env.windows": {
         "PYTHONPATH": "${workspaceFolder}/src",

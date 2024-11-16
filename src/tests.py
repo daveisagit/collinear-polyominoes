@@ -29,10 +29,10 @@ if max_n > 10:
 # create all the files
 for n in range(1, max_n + 1):
     for k in range(1, n + 1):
-        create_ancestors_nk(SquarePoly, Lattice, n, k)
-        create_ancestors_nk(SquarePoly, Plane, n, k)
-        create_ancestors_nk(HexagonPoly, Lattice, n, k)
-        create_ancestors_nk(HexagonPoly, Plane, n, k)
+        create_ancestors_nk(SquarePoly, Lattice, n, k, overwrite=True)
+        create_ancestors_nk(SquarePoly, Plane, n, k, overwrite=True)
+        create_ancestors_nk(HexagonPoly, Lattice, n, k, overwrite=True)
+        create_ancestors_nk(HexagonPoly, Plane, n, k, overwrite=True)
 
 
 # assertions

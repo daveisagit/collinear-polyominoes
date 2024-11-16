@@ -3,7 +3,7 @@
 from operator import add, sub
 import os
 from numpy.linalg import matrix_rank
-from utils import get_pattern_limits, scalar_multiply
+from utils import draw_pattern, get_pattern_limits, scalar_multiply
 
 ENCODING_SEPARATOR = "-"
 
@@ -293,6 +293,15 @@ class PolyShape:
         )
 
     @classmethod
+    def draw(cls, pattern, pixel="@"):
+        """Draw the pattern given id, tuple or point set to console"""
+        if isinstance(pattern, str):
+            pattern = encoding_str_to_tuple(pattern)
+        if isinstance(pattern, (list, tuple)):
+            pattern = SquarePoly.decoder(pattern)
+        draw_pattern(pattern, pixel=pixel)
+
+    @classmethod
     def get_file_path(
         cls,
         collinearity: CollinearityType,
@@ -372,7 +381,8 @@ class PolyShape:
 
 class SquarePoly(PolyShape):
 
-    file_name = "squ"
+    title = "Square Polyonimoes"
+    file_name = "square"
     origin = (0, 0)
     vectors = [(0, 1), (-1, 0), (0, -1), (1, 0)]
     dimensions = 2
@@ -431,8 +441,9 @@ class SquarePoly(PolyShape):
 
 class HexagonPoly(PolyShape):
 
+    title = "Hexagon Polyonimoes"
     origin = (0, 0, 0)
-    file_name = "hex"
+    file_name = "hexagon"
     vectors = [
         (1, 0, -1),
         (1, -1, 0),

@@ -63,7 +63,6 @@ def get_pattern_limits(pattern):
 def draw_pattern(points, pixel="@"):
     """Visualise a pattern of nodes on the console"""
     min_r, min_c, max_r, max_c = get_pattern_limits(points)
-
     for r in range(min_r, max_r + 1):
         row = ""
         for c in range(min_c, max_c + 1):

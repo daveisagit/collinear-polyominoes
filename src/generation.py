@@ -97,7 +97,11 @@ def load_ancestors_nk(
 
 
 def create_ancestors_nk(
-    poly_class: PolyShape, collinearity: CollinearityType, n: int, k: int
+    poly_class: PolyShape,
+    collinearity: CollinearityType,
+    n: int,
+    k: int,
+    overwrite=False,
 ):
     """Return a dict of ancestors for a given n,k"""
 
@@ -122,6 +126,13 @@ def create_ancestors_nk(
     # We then reverse that to form the ancestors DAG
 
     silent = os.environ.get("POLYOMINO_SILENT", False)
+
+    fp = poly_class.get_file_path(collinearity, Ancestor, n, k)
+    if os.path.isfile(fp) and not overwrite:
+        print(
+            f"File exists already for {Ancestor.file_name} for {poly_class.file_name} {collinearity.file_name} n={n} k={k}"
+        )
+        return
 
     # Seeded at the origin - single tile and has no ancestors
     # "1" is the encoding
@@ -201,3 +212,21 @@ def create_ancestors_nk(
             ancestors[d_id][id] = removal_point
 
     poly_class.save_to_file(collinearity, Ancestor, n, k, ancestors)
+
+
+def create_data(
+    poly_class: PolyShape,
+    collinearity: CollinearityType,
+    n_start: int,
+    n_finish=None,
+    k_limit=None,
+):
+    """Create data for n_start <= n <= n_finish with option to restrict k"""
+    if n_finish is None:
+        n_finish = n_start
+    for n in range(n_start, n_finish + 1):
+        k_stop = n + 1
+        if k_limit:
+            k_stop = k_limit + 1
+        for k in range(1, k_stop):
+            create_ancestors_nk(poly_class, collinearity, n, k)

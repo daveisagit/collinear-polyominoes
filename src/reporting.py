@@ -10,7 +10,7 @@ def get_summary(poly_class: PolyShape, collinearity: CollinearityType, max_m):
     for n in range(1, max_m + 1):
         for k in range(1, n + 1):
             file_path = poly_class.get_file_path(collinearity, Ancestor, n, k)
-            row_count = 0
+            row_count = None
             try:
                 with open(file_path, "r") as file_obj:
                     meta = file_obj.readline()
@@ -21,75 +21,70 @@ def get_summary(poly_class: PolyShape, collinearity: CollinearityType, max_m):
     return summary
 
 
-# def output_table(poly_type, N, plane=True, cell_width=10):
-#     """Output a collinearity table n,k to console
-#     and the values for OEIS Data"""
-#     ploy_class = get_class(poly_type)
-#     results_dict = {}
-#     all_as_line = []
-#     format_string = f"{cell_width}d"
+def output_table(
+    poly_class: PolyShape,
+    collinearity: CollinearityType,
+    max_n: int,
+    k_limit=None,
+    cell_width=10,
+):
+    """Output a collinearity table n,k to console
+    and the values for OEIS Data"""
+    summary = get_summary(poly_class, collinearity, max_n)
+    oeis = []
+    format_string = f"{cell_width}d"
 
-#     for n in range(1, N + 1):
-#         collinearity = load_collinearity_file(ploy_class, n)
-#         results_dict[n] = collinearity
+    # titles
+    print()
+    print(
+        f"{poly_class.title} of size (n) with no more than (k) cells collinear on the {collinearity.file_name.title()}"
+    )
+    print()
 
-#     # titles
-#     print()
-#     if plane:
-#         print(f"{ploy_class.file_name}|  Collinearity limit for any line in the plane")
-#     else:
-#         print(
-#             f"{ploy_class.file_name}|  Collinearity limit only considered along lattice lines"
-#         )
-#     print("   |")
+    # header
+    print("   |  k")
+    line = " n | "
+    k_stop = max_n + 1
+    if k_limit:
+        k_stop = k_limit + 1
+    for k in range(1, k_stop):
+        line += f"{k:{format_string}}"
+    line = line.ljust(cell_width * (k_stop - 1) + 10)
+    line += "Total".rjust(cell_width)
+    print(line)
+    print("-" * len(line))
 
-#     # header
-#     print("   |  k")
-#     line = " n | "
-#     for k in range(1, N + 1):
-#         line += f"{k:{format_string}}"
-#     line = line.ljust(cell_width * N + 10)
-#     line += "Total".rjust(cell_width)
-#     print(line)
-#     print("-" * len(line))
+    # data
+    for n in range(1, max_n + 1):
+        row_sum = 0
+        line = f"{n:2d} | "
+        k_stop = n + 1
+        if k_limit:
+            k_stop = k_limit + 1
+        for k in range(1, k_stop):
+            cnt = summary.get((n, k), 0)
+            oeis.append(cnt)
+            if cnt is None:
+                line += " " * cell_width
+            else:
+                row_sum += cnt
+                line += f"{cnt:{format_string}}"
 
-#     # data
-#     for n in range(1, N + 1):
-#         row_sum = 0
-#         attrs = results_dict.get(n, {})
-#         line = f"{n:2d} | "
-#         for k in range(1, n + 1):
-#             data = [
-#                 id
-#                 for id, (l_max, p_max) in attrs.items()
-#                 if plane and p_max == k or not plane and l_max == k
-#             ]
-#             cnt = len(data)
+        line = line.ljust(cell_width * (k_stop - 1) + 10)
+        if row_sum:
+            line += f"{row_sum:{format_string}}"
+        print(line)
 
-#             all_as_line.append(cnt)
-#             row_sum += cnt
-
-#             line += f"{cnt:{format_string}}"
-
-#         line = line.ljust(cell_width * N + 10)
-#         line += f"{row_sum:{format_string}}"
-#         print(line)
-#     print()
-
-#     # OEIS data
-#     print("OEIS Data")
-#     print()
-#     print(", ".join(str(x) for x in all_as_line))
-#     print()
+    print()
 
 
 def oeis_data(
-    poly_class: PolyShape, collinearity: CollinearityType, max_m: int
+    poly_class: PolyShape, collinearity: CollinearityType, max_n: int
 ) -> list:
     """Output OEIS Data"""
-    summary = get_summary(poly_class, collinearity, max_m)
+    summary = get_summary(poly_class, collinearity, max_n)
     oeis_data = []
-    for n in range(1, max_m + 1):
+    for n in range(1, max_n + 1):
         for k in range(1, n + 1):
-            oeis_data.append(summary.get((n, k)))
+            oeis_data.append(summary.get((n, k), 0))
     return oeis_data
