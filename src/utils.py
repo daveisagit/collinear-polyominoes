@@ -1,5 +1,8 @@
 """Various utility functions"""
 
+from collections import defaultdict
+
+
 PROGRESS_BAR_FREQ = 2  # as %
 
 
@@ -72,3 +75,12 @@ def draw_pattern(points, pixel="@"):
                 c = pixel
             row += c
         print(row)
+
+
+def reverse_dag(g):
+    """Return the reverse of the directed graph"""
+    rg = defaultdict(dict)
+    for u, edges in g.items():
+        for v, p in edges.items():
+            rg[v][u] = p
+    return rg

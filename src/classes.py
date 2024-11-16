@@ -166,28 +166,31 @@ class Identifier(DataType):
     file_name = "ancestor"
 
     @staticmethod
-    def line_to_data(id: str, line_data: str):
+    def line_to_data(line: str):
         """Return the integer tuple identifier"""
-        return encoding_str_to_tuple(id)
+        arr = line.split(" ")
+        id = arr[0]
+        return id, encoding_str_to_tuple(id)
 
 
 class Ancestor(DataType):
     file_name = "ancestor"
 
     @staticmethod
-    def line_to_data(id: str, line_data: str):
+    def line_to_data(line: str):
         """Return the ancestors of a polyomino effectively directed edges
         where the edge data is the point being added from the perspective
         the larger descendent"""
         ancestors = {}
-        ancestor_tokens = line_data.split(" ")
-        for ancestor in ancestor_tokens:
+        tokens = line.split(" ")
+        id = tokens[0]
+        for ancestor in tokens[1:]:
             arr = ancestor.split(":")
             a_id = arr[0]
             arr = arr[1].split(",")
             p = tuple(int(x) for x in arr)
             ancestors[a_id] = p
-        return ancestors
+        return id, ancestors
 
     @staticmethod
     def data_to_line(id: str, line_data: str) -> str:

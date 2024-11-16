@@ -44,9 +44,9 @@ def load_data_file(
             cnt = 0
             while line := file_obj.readline():
                 line = line.strip()
-                arr = line.split(" ")
-                id = line.split(" ")[0]
-                line_data = data_type.line_to_data(id, arr[1:])
+                # arr = line.split(" ")
+                # id = line.split(" ")[0]
+                id, line_data = data_type.line_to_data(line)
                 data_dict[id] = line_data
                 cnt += 1
                 if not silent and (cnt % pbf == 0 or cnt == row_count):
@@ -91,8 +91,10 @@ def load_ancestors_nk(
     """Return a dictionary keyed on id (str) where the value is a dict of ancestors value
     being additional point"""
     return {
-        id: poly_class.decoder(encoding)
-        for id, encoding in load_data_file(poly_class, collinearity, Ancestor, n, k)
+        id: ancestors
+        for id, ancestors in load_data_file(
+            poly_class, collinearity, Ancestor, n, k
+        ).items()
     }
 
 
