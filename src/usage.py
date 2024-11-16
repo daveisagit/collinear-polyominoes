@@ -10,7 +10,7 @@ from classes import (
     create_folder_structure,
 )
 from generation import create_ancestors_nk, create_data
-from reporting import descendants, output_table
+from reporting import descendant_groups, output_table
 
 # default root folder for data
 os.environ["POLYOMINO_DATA_FOLDER"] = "data"
@@ -32,17 +32,15 @@ os.environ["POLYOMINO_DATA_FOLDER"] = "data"
 # Visualise a polyomino in the console
 # PolyShape.draw("327680-32768-65792-133632-65808-131616-262464-164352-21504", pixel="#")
 
-k_always_remains_unchanged, both, k_always_increases = descendants(
-    SquarePoly, Plane, 8, 3
-)
-print(f"Remains {len(k_always_remains_unchanged)}")
-for p in k_always_remains_unchanged:
-    PolyShape.draw(p)
-    print()
+# Get a feel for how generation splits between P(n+1,k) and P(n+1,k+1)
+# As n increases more go to P(n+1,k+1) and less to P(n+1,k), eventually zero?
+d_dict = {}
+for n in range(3, 15):
+    d_dict[n] = descendant_groups(SquarePoly, Plane, n, 3)
 
-print(f"Both {len(both)}")
-
-print(f"Increases {len(k_always_increases)}")
-for p in k_always_increases:
-    PolyShape.draw(p)
-    print()
+for n, (descendants_to_n1k0, descendants_to_n1k1) in d_dict.items():
+    print(n, len(descendants_to_n1k0), len(descendants_to_n1k1))
+    forced_to_k1 = set(descendants_to_n1k1) - set(descendants_to_n1k0)
+    for p in forced_to_k1:
+        PolyShape.draw(p)
+        print()
