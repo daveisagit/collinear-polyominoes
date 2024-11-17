@@ -32,23 +32,46 @@ Using the centres of the cells as points then collinear points in the plane mean
 
 ### Maximum Points Collinear
 
-We are interested in counting the number of polyominoes that have a maximum number of cells collinear (k)
-
-For the 4 cases of (Square or Hexagon) x (Lattice or Plane).
+We are interested in counting the number of polyominoes that have a maximum number of cells collinear (k) for the 4 cases of (Square or Hexagon) x (Lattice or Plane).
 
 #### Triangular Sequences
 
-OEIS
+See OEIS
+
+- [A377941](https://oeis.org/A377941) | Square | Lattice
+- [A377942](https://oeis.org/A377942) | Square | Plane
+- [A378014](https://oeis.org/A378014) | Hexagon | Lattice
+- [A378015](https://oeis.org/A378015) | Hexagon | Plane
 
 ### Largest Polyomino with no more than 3 cells collinear on the Plane
 
-Square: n=15
+Square: n=15 , the only polyomino is
 
-Hexagon: n=23
+```text
+  #
+  #
+ ###
+ # ##
+##  #
+#  ##
+#
+```
+
+Hexagon: n=23 , the 2 hexagon polyominoes are:
+
+```text
+            @ @                      @
+           @                    @     @
+    @       @                    @ @   @
+     @ @     @          @           @ @
+@   @       @            @ @           @
+ @   @       @          @   @           @
+  @ @         @              @ @       @
+     @     @ @                  @   @ @
+      @ @ @                      @ @
+```
 
 ### Enumeration
 
-Binary encoding of row pixels
-
-
-
+The enumeration identifier is constructed by observing the pattern on a row/column grid using the usual coordinate system.
+This gives us a binary representation of each row, so the whole pattern is represented as a tuple of integers.

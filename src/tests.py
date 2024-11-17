@@ -3,7 +3,7 @@
 import os
 from classes import HexagonPoly, Lattice, Plane, SquarePoly, create_folder_structure
 from generation import create_ancestors_nk
-from reporting import oeis_data
+from reporting import oeis_data_triangle
 
 os.environ["POLYOMINO_DATA_FOLDER"] = "temp"
 max_n = 7
@@ -36,7 +36,19 @@ for n in range(1, max_n + 1):
 
 
 # assertions
-assert oeis_data(SquarePoly, Lattice, max_n) == answer_for_n(squ_lattice, max_n)
-assert oeis_data(SquarePoly, Plane, max_n) == answer_for_n(squ_plane, max_n)
-assert oeis_data(HexagonPoly, Lattice, max_n) == answer_for_n(hex_lattice, max_n)
-assert oeis_data(HexagonPoly, Plane, max_n) == answer_for_n(hex_plane, max_n)
+assert oeis_data_triangle(SquarePoly, Lattice, max_n) == answer_for_n(
+    squ_lattice,
+    max_n,
+)
+assert oeis_data_triangle(SquarePoly, Plane, max_n) == answer_for_n(
+    squ_plane,
+    max_n,
+)
+assert oeis_data_triangle(HexagonPoly, Lattice, max_n) == answer_for_n(
+    hex_lattice,
+    max_n,
+)
+assert oeis_data_triangle(HexagonPoly, Plane, max_n) == answer_for_n(
+    hex_plane,
+    max_n,
+)

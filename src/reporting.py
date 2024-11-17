@@ -6,13 +6,15 @@ from generation import load_ancestors_nk, load_polyomino_patterns_nk
 from utils import reverse_dag
 
 
-def get_summary(poly_class: PolyShape, collinearity: CollinearityType, max_m):
+def get_summary(
+    poly_class: PolyShape, collinearity: CollinearityType, max_m, default=None
+):
     """Return the summary counts as a dict keyed on (n,k)"""
     summary = defaultdict(int)
     for n in range(1, max_m + 1):
         for k in range(1, n + 1):
             file_path = poly_class.get_file_path(collinearity, Ancestor, n, k)
-            row_count = None
+            row_count = default
             try:
                 with open(file_path, "r") as file_obj:
                     meta = file_obj.readline()
@@ -73,22 +75,35 @@ def output_table(
                 line += f"{cnt:{format_string}}"
 
         line = line.ljust(cell_width * (k_stop - 1) + 10)
-        if row_sum:
-            line += f"{row_sum:{format_string}}"
+        line += f"{row_sum:{format_string}}"
         print(line)
 
     print()
 
 
-def oeis_data(
+def oeis_data_triangle(
     poly_class: PolyShape, collinearity: CollinearityType, max_n: int
 ) -> list:
-    """Output OEIS Data"""
+    """Output OEIS Data for a triangle sequence"""
     summary = get_summary(poly_class, collinearity, max_n)
     oeis_data = []
     for n in range(1, max_n + 1):
         for k in range(1, n + 1):
             oeis_data.append(summary.get((n, k), 0))
+    return oeis_data
+
+
+def oeis_data_row_total_for_n(
+    poly_class: PolyShape, collinearity: CollinearityType, max_n: int
+) -> list:
+    """Output row totals"""
+    summary = get_summary(poly_class, collinearity, max_n, default=0)
+    oeis_data = []
+    for n in range(1, max_n + 1):
+        row_sum = 0
+        for k in range(1, n + 1):
+            row_sum += summary.get((n, k), 0)
+        oeis_data.append(row_sum)
     return oeis_data
 
 
