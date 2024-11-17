@@ -68,7 +68,7 @@ create_folder_structure()
 create_data(HexagonPoly, Plane, 1, 24, 3)
 
 # output the n/k table, A377756 is the row sums
-output_table(HexagonPoly, Plane, 24, 3)
+output_table(HexagonPoly, Plane, 24, k_limit=3)
 
 # assert the result matches submission
 result = ", ".join([str(x) for x in oeis_data_row_total_for_n(HexagonPoly, Plane, 24)])

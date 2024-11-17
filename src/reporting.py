@@ -62,18 +62,17 @@ def output_table(
     for n in range(1, max_n + 1):
         row_sum = 0
         line = f"{n:2d} | "
-        k_stop = n + 1
+        k_stop = max_n + 1
         if k_limit:
             k_stop = k_limit + 1
         for k in range(1, k_stop):
-            cnt = summary.get((n, k), 0)
+            cnt = summary.get((n, k))
             oeis.append(cnt)
             if cnt is None:
                 line += " " * cell_width
             else:
                 row_sum += cnt
                 line += f"{cnt:{format_string}}"
-
         line = line.ljust(cell_width * (k_stop - 1) + 10)
         line += f"{row_sum:{format_string}}"
         print(line)
