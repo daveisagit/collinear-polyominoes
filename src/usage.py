@@ -56,7 +56,7 @@ os.environ["POLYOMINO_DATA_FOLDER"] = "data"
 # HexagonPoly.plot("262144-532480-1130496-655392-1048896-2097696-1053696-663552-81920")
 # HexagonPoly.plot("10")
 # HexagonPoly.plot("84-10-4")
-# SquarePoly.plot("14-26-19-28-4")
+SquarePoly.plot("112-28-7-44-56")
 
 
 # create_data(SquarePoly, Plane, 1, 16, 3)
