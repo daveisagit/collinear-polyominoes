@@ -88,3 +88,6 @@ print("A378014")
 output_table(HexagonPoly, Lattice, 10)
 print("A378015")
 output_table(HexagonPoly, Plane, 10)
+
+# Visualise a polyomino in the console
+PolyShape.draw("112-28-7-44-56", pixel="#")
