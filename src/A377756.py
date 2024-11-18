@@ -71,7 +71,9 @@ create_data(HexagonPoly, Plane, 1, 24, 3)
 output_table(HexagonPoly, Plane, 24, k_limit=3)
 
 # assert the result matches submission
-result = ", ".join([str(x) for x in oeis_data_row_total_for_n(HexagonPoly, Plane, 24)])
+result = ", ".join(
+    [str(x) for x in oeis_data_row_total_for_n(HexagonPoly, Plane, 24, k_limit=3)]
+)
 data_str = "1, 1, 3, 6, 18, 55, 169, 477, 1245, 2750, 5380, 8989, 12674, 14741, 13928, 10297, 6185, 2910, 1012, 289, 69, 12, 2, 0"
 assert result == data_str
 print(result)

@@ -93,14 +93,17 @@ def oeis_data_triangle(
 
 
 def oeis_data_row_total_for_n(
-    poly_class: PolyShape, collinearity: CollinearityType, max_n: int
+    poly_class: PolyShape, collinearity: CollinearityType, max_n: int, k_limit=None
 ) -> list:
     """Output row totals"""
     summary = get_summary(poly_class, collinearity, max_n, default=0)
     oeis_data = []
     for n in range(1, max_n + 1):
         row_sum = 0
-        for k in range(1, n + 1):
+        k_stop = n + 1
+        if k_limit:
+            k_stop = k_limit + 1
+        for k in range(1, k_stop):
             row_sum += summary.get((n, k), 0)
         oeis_data.append(row_sum)
     return oeis_data

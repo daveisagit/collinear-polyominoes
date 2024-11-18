@@ -10,7 +10,7 @@ from classes import (
     create_folder_structure,
 )
 from generation import create_ancestors_nk, create_data
-from reporting import descendant_groups, output_table
+from reporting import descendant_groups, oeis_data_row_total_for_n, output_table
 
 # default root folder for data
 os.environ["POLYOMINO_DATA_FOLDER"] = "data"
@@ -52,7 +52,17 @@ os.environ["POLYOMINO_DATA_FOLDER"] = "data"
 #         print()
 
 # Plot
-PolyShape.plot("327680-32768-65792-133632-65808-131616-262464-164352-21504")
-PolyShape.plot("262144-532480-1130496-655392-1048896-2097696-1053696-663552-81920")
+# PolyShape.plot("327680-32768-65792-133632-65808-131616-262464-164352-21504")
+# PolyShape.plot("262144-532480-1130496-655392-1048896-2097696-1053696-663552-81920")
 # PolyShape.plot("10")
 # PolyShape.plot("84-10-4")
+
+create_data(SquarePoly, Plane, 1, 16, 3)
+output_table(SquarePoly, Plane, 16, k_limit=3)
+result = ", ".join(
+    [str(x) for x in oeis_data_row_total_for_n(SquarePoly, Plane, 16, k_limit=3)]
+)
+print(result)
+
+expected = "1, 1, 2, 4, 9, 18, 37, 62, 86, 78, 61, 34, 14, 4, 1, 0"
+assert result == expected
