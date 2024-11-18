@@ -50,3 +50,9 @@ os.environ["POLYOMINO_DATA_FOLDER"] = "data"
 #     for p in forced_to_k1:
 #         PolyShape.draw(p)
 #         print()
+
+# Plot
+PolyShape.plot("327680-32768-65792-133632-65808-131616-262464-164352-21504")
+PolyShape.plot("262144-532480-1130496-655392-1048896-2097696-1053696-663552-81920")
+# PolyShape.plot("10")
+# PolyShape.plot("84-10-4")

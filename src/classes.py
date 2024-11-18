@@ -4,6 +4,7 @@ from operator import add, sub
 import os
 from numpy.linalg import matrix_rank
 from utils import draw_pattern, get_pattern_limits, scalar_multiply
+from visuals import plot_pattern
 
 ENCODING_SEPARATOR = "-"
 
@@ -296,13 +297,25 @@ class PolyShape:
         )
 
     @classmethod
-    def draw(cls, pattern, pixel="@"):
+    def pattern_to_points(cls, pattern):
         """Draw the pattern given id, tuple or point set to console"""
         if isinstance(pattern, str):
             pattern = encoding_str_to_tuple(pattern)
         if isinstance(pattern, (list, tuple)):
             pattern = SquarePoly.decoder(pattern)
-        draw_pattern(pattern, pixel=pixel)
+        return pattern
+
+    @classmethod
+    def draw(cls, pattern, pixel="@"):
+        """Draw the pattern given id, tuple or point set to console"""
+        points = cls.pattern_to_points(pattern)
+        draw_pattern(points, pixel=pixel)
+
+    @classmethod
+    def plot(cls, pattern):
+        """Plot using matplotlib"""
+        points = cls.pattern_to_points(pattern)
+        plot_pattern(points)
 
     @classmethod
     def get_file_path(
