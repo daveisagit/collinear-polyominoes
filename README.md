@@ -49,7 +49,7 @@ Square: n=15 , the only polyomino is
 
 <img
 src="https://raw.githubusercontent.com/daveisagit/collinear-polyominoes/main/assets/squ_max.png"
-width="800" alt="Largest Square Polyomino">
+width="400" alt="Largest Square Polyomino">
 
 Hexagon: n=23 , the 2 hexagon polyominoes are:
 
