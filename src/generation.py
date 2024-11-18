@@ -178,7 +178,10 @@ def create_ancestors_nk(
         if not silent and (cnt % pbf == 0 or cnt == len(prev)):
             progress_bar_update(len(prev), cnt)
 
-        # for every node in that graph
+        # create the border
+        border = set()
+
+        # for every node in the graph
         for p in pattern:
 
             # for ever possible neighbour of that node
@@ -186,27 +189,31 @@ def create_ancestors_nk(
                 np = tuple(map(add, p, v))
                 if np in pattern:
                     continue
+                border.add(np)
 
-                # a potential new pattern
-                new_pattern = pattern | {np}
-                d_id, removal_point, pref_pattern = poly_class.get_pattern_id(
-                    new_pattern, np
-                )
+        # for every node on the border
+        for np in border:
 
-                # how does the new point (the removal point) affect collinearity
-                max_collinear = collinearity.get_maximum_collinear(
-                    pref_pattern, removal_point, poly_class.dimensions
-                )
+            # a potential new pattern
+            new_pattern = pattern | {np}
+            d_id, removal_point, pref_pattern = poly_class.get_pattern_id(
+                new_pattern, np
+            )
 
-                if id in same:
-                    if max_collinear > k:
-                        continue
-                else:
-                    if max_collinear < k:
-                        continue
+            # how does the new point (the removal point) affect collinearity
+            max_collinear = collinearity.get_maximum_collinear(
+                pref_pattern, removal_point, poly_class.dimensions
+            )
 
-                # add to the DAG of descendants
-                descendants[id][d_id] = removal_point
+            if id in same:
+                if max_collinear > k:
+                    continue
+            else:
+                if max_collinear < k:
+                    continue
+
+            # add to the DAG of descendants
+            descendants[id][d_id] = removal_point
 
     # ancestors is reversed DAG of descendants
     for id, d_dict in descendants.items():
