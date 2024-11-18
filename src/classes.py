@@ -1,12 +1,16 @@
 """Classes and supporting functions"""
 
-from operator import add, sub
 import os
+import matplotlib.pyplot as plt
 from numpy.linalg import matrix_rank
+from matplotlib.patches import RegularPolygon
+from math import radians, sin, sqrt
+from operator import add, sub
 from utils import draw_pattern, get_pattern_limits, scalar_multiply
-from visuals import plot_pattern
 
 ENCODING_SEPARATOR = "-"
+R3O2 = sin(radians(60))
+ROOT2 = sqrt(2)
 
 
 def encoding_str_to_tuple(s: str):
@@ -224,6 +228,57 @@ class PolyShape:
     dimensions = 2
     symmetry = 1
 
+    plot_orientation = 0
+    plot_radius = 1
+    plot_facecolor = "lightyellow"
+
+    @classmethod
+    def plot(cls, pattern, alt_cell=None, to_file=True):
+
+        id = None
+        if isinstance(pattern, str):
+            id = pattern
+        console_points = cls.pattern_to_points(pattern)
+
+        # adjustment from console row/col points
+        # to matplotlib x,y
+        plot_points = cls.console_to_plot(console_points)
+
+        # we need to scale the marker based on the
+        # physical space the polyomino takes up
+        min_r, min_c, max_r, max_c = get_pattern_limits(plot_points)
+        marker_scale = max((max_r - min_r), ((max_c - min_c)))
+        marker_scale = (10 / marker_scale) ** 2
+
+        fig, ax = plt.subplots(1)
+        ax.set_aspect("equal")
+        ax.axis("off")
+
+        # Add some coloured cells
+        for x, y in plot_points:
+            cell = RegularPolygon(
+                (x, y),
+                numVertices=cls.symmetry,
+                radius=cls.plot_radius,
+                orientation=cls.plot_orientation,
+                facecolor=cls.plot_facecolor,
+                alpha=0.5,
+                edgecolor="k",
+            )
+            ax.add_patch(cell)
+
+        # Also add scatter points in cell centres
+        X = [p[0] for p in plot_points]
+        Y = [p[1] for p in plot_points]
+        ax.scatter(X, Y, c="k", s=marker_scale)
+
+        if to_file and id:
+            fig.tight_layout()
+            plt.savefig(f"{cls.file_name} {id}.png")
+            return
+
+        plt.show()
+
     @classmethod
     def point_to_doubled(cls, p):
         return p
@@ -298,7 +353,7 @@ class PolyShape:
 
     @classmethod
     def pattern_to_points(cls, pattern):
-        """Draw the pattern given id, tuple or point set to console"""
+        """Return the row,col points as seen on a console image"""
         if isinstance(pattern, str):
             pattern = encoding_str_to_tuple(pattern)
         if isinstance(pattern, (list, tuple)):
@@ -306,16 +361,17 @@ class PolyShape:
         return pattern
 
     @classmethod
+    def plot_coordinates(cls, points):
+        """Return the list of X and Y coordinates for matplotlib"""
+        # Horizontal cartesian coords
+        Y = [-p[0] for p in points]
+        X = [2 * p[1] * R3O2 / 3 for p in points]  # good
+
+    @classmethod
     def draw(cls, pattern, pixel="@"):
         """Draw the pattern given id, tuple or point set to console"""
         points = cls.pattern_to_points(pattern)
         draw_pattern(points, pixel=pixel)
-
-    @classmethod
-    def plot(cls, pattern):
-        """Plot using matplotlib"""
-        points = cls.pattern_to_points(pattern)
-        plot_pattern(points)
 
     @classmethod
     def get_file_path(
@@ -404,6 +460,14 @@ class SquarePoly(PolyShape):
     dimensions = 2
     symmetry = 4
 
+    plot_orientation = radians(45)
+    plot_radius = 1 / ROOT2
+
+    @classmethod
+    def console_to_plot(cls, doubled_points):
+        """Convert to real values for plotting"""
+        return [(p[1], -p[0]) for p in doubled_points]
+
     @classmethod
     def normalise_position(cls, points, ref):
         """Translate the pattern to the top left in a consistent fashion
@@ -470,6 +534,14 @@ class HexagonPoly(PolyShape):
     ]
     dimensions = 3
     symmetry = 6
+
+    plot_radius = 2.0 / 3.0
+    plot_facecolor = "blue"
+
+    @classmethod
+    def console_to_plot(cls, doubled_points):
+        """Convert to real values for plotting"""
+        return [((2 * p[1] * R3O2 / 3), -p[0]) for p in doubled_points]
 
     @classmethod
     def point_to_doubled(cls, p):

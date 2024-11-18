@@ -59,6 +59,10 @@ Square: n=15 , the only polyomino is
 
 Hexagon: n=23 , the 2 hexagon polyominoes are:
 
+<img
+src="https://raw.githubusercontent.com/daveisagit/collinear-polyominoes/main/assets/hex_max.png"
+width="800" alt="Largest Hexagon Polyominoes">
+
 ```text
             @ @                      @
            @                    @     @

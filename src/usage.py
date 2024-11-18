@@ -52,17 +52,19 @@ os.environ["POLYOMINO_DATA_FOLDER"] = "data"
 #         print()
 
 # Plot
-# PolyShape.plot("327680-32768-65792-133632-65808-131616-262464-164352-21504")
-# PolyShape.plot("262144-532480-1130496-655392-1048896-2097696-1053696-663552-81920")
-# PolyShape.plot("10")
-# PolyShape.plot("84-10-4")
+# HexagonPoly.plot("327680-32768-65792-133632-65808-131616-262464-164352-21504")
+# HexagonPoly.plot("262144-532480-1130496-655392-1048896-2097696-1053696-663552-81920")
+# HexagonPoly.plot("10")
+# HexagonPoly.plot("84-10-4")
+# SquarePoly.plot("14-26-19-28-4")
 
-create_data(SquarePoly, Plane, 1, 16, 3)
-output_table(SquarePoly, Plane, 16, k_limit=3)
-result = ", ".join(
-    [str(x) for x in oeis_data_row_total_for_n(SquarePoly, Plane, 16, k_limit=3)]
-)
-print(result)
 
-expected = "1, 1, 2, 4, 9, 18, 37, 62, 86, 78, 61, 34, 14, 4, 1, 0"
-assert result == expected
+# create_data(SquarePoly, Plane, 1, 16, 3)
+# output_table(SquarePoly, Plane, 16, k_limit=3)
+# result = ", ".join(
+#     [str(x) for x in oeis_data_row_total_for_n(SquarePoly, Plane, 16, k_limit=3)]
+# )
+# print(result)
+
+# expected = "1, 1, 2, 4, 9, 18, 37, 62, 86, 78, 61, 34, 14, 4, 1, 0"
+# assert result == expected
