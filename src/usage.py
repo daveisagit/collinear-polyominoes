@@ -52,13 +52,9 @@ os.environ["POLYOMINO_DATA_FOLDER"] = "data"
 #         print()
 
 # Plotting - Opens a window if to_file=False
-# HexagonPoly.plot(
-#     "327680-32768-65792-133632-65808-131616-262464-164352-21504", to_file=False
-# )
-# HexagonPoly.plot(
-#     "262144-532480-1130496-655392-1048896-2097696-1053696-663552-81920", to_file=False
-# )
-# SquarePoly.plot("112-28-7-44-56", to_file=False)
+# HexagonPoly.plot("327680-32768-65792-133632-65808-131616-262464-164352-21504")
+# HexagonPoly.plot("262144-532480-1130496-655392-1048896-2097696-1053696-663552-81920")
+# SquarePoly.plot("112-28-7-44-56", to_file=False, show_graph=False)
 
 # Proving the result for the largest square plane when k<=3
 # create_data(SquarePoly, Plane, 1, 16, 3)
@@ -72,22 +68,31 @@ os.environ["POLYOMINO_DATA_FOLDER"] = "data"
 # assert result == expected
 
 # create all the files for all the categories up to 10
-max_n = 10
-for n in range(1, max_n + 1):
-    for k in range(1, n + 1):
-        create_ancestors_nk(SquarePoly, Lattice, n, k)
-        create_ancestors_nk(SquarePoly, Plane, n, k)
-        create_ancestors_nk(HexagonPoly, Lattice, n, k)
-        create_ancestors_nk(HexagonPoly, Plane, n, k)
+# max_n = 10
+# for n in range(1, max_n + 1):
+#     for k in range(1, n + 1):
+#         create_ancestors_nk(SquarePoly, Lattice, n, k)
+#         create_ancestors_nk(SquarePoly, Plane, n, k)
+#         create_ancestors_nk(HexagonPoly, Lattice, n, k)
+#         create_ancestors_nk(HexagonPoly, Plane, n, k)
 
-print("A377941")
-output_table(SquarePoly, Lattice, 10)
-print("A377942")
-output_table(SquarePoly, Plane, 10)
-print("A378014")
-output_table(HexagonPoly, Lattice, 10)
-print("A378015")
-output_table(HexagonPoly, Plane, 10)
+# print("A377941")
+# output_table(SquarePoly, Lattice, 10)
+# print("A377942")
+# output_table(SquarePoly, Plane, 10)
+# print("A378014")
+# output_table(HexagonPoly, Lattice, 10)
+# print("A378015")
+# output_table(HexagonPoly, Plane, 10)
 
-# Visualise a polyomino in the console
-PolyShape.draw("112-28-7-44-56", pixel="#")
+# # Visualise a polyomino in the console
+# PolyShape.draw("112-28-7-44-56", pixel="#")
+
+# SquarePoly.plot("14-28-7-2")
+# SquarePoly.plot("28-24-14-6")
+
+# HexagonPoly.plot("1344-2688-336-8")
+# HexagonPoly.plot("5376-2688-336-8")
+
+
+# create_data(SquarePoly, Plane, 1, 40, 4)

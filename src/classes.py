@@ -1,6 +1,7 @@
 """Classes and supporting functions"""
 
 import os
+from matplotlib.collections import LineCollection
 import matplotlib.pyplot as plt
 from numpy.linalg import matrix_rank
 from matplotlib.patches import RegularPolygon
@@ -233,12 +234,19 @@ class PolyShape:
     plot_facecolor = "lightyellow"
 
     @classmethod
-    def plot(cls, pattern, alt_cell=None, to_file=True):
+    def plot(cls, pattern, alt_cell=None, to_file=True, show_graph=True):
 
+        marker_size = 10
         id = None
         if isinstance(pattern, str):
             id = pattern
         console_points = cls.pattern_to_points(pattern)
+
+        edges = None
+        if show_graph and id:
+            gph = cls.get_graph(id)
+            edges = cls.graph_to_plot(gph)
+            marker_size = 30
 
         # adjustment from console row/col points
         # to matplotlib x,y
@@ -248,7 +256,7 @@ class PolyShape:
         # physical space the polyomino takes up
         min_r, min_c, max_r, max_c = get_pattern_limits(plot_points)
         marker_scale = max((max_r - min_r), ((max_c - min_c)))
-        marker_scale = (10 / marker_scale) ** 2
+        marker_scale = (marker_size / marker_scale) ** 2
 
         fig, ax = plt.subplots(1)
         ax.set_aspect("equal")
@@ -271,6 +279,11 @@ class PolyShape:
         X = [p[0] for p in plot_points]
         Y = [p[1] for p in plot_points]
         ax.scatter(X, Y, c="k", s=marker_scale)
+
+        # optional graph
+        if edges:
+            lc = LineCollection(edges)
+            ax.add_collection(lc)
 
         if to_file and id:
             fig.tight_layout()
@@ -435,11 +448,29 @@ class PolyShape:
                 f"Loading {cls.file_name} {collinearity_type.file_name} {data_file_type.file_name} n={n} k={k} rows={total}"
             )
 
-    def get_meta(line):
-        meta = meta.split(",")
-        _, meta_poly_type, meta_n, meta_cnt = meta
-        meta_n = int(meta_n)
-        meta_cnt = int(meta_cnt)
+    @classmethod
+    def get_graph(cls, pattern) -> dict:
+        """Return a graph dict of set"""
+        if isinstance(pattern, str):
+            pattern = encoding_str_to_tuple(pattern)
+        points = cls.decoder(pattern)
+        gph = {p: set() for p in points}
+        for p in points:
+            for v in cls.vectors:
+                np = tuple(map(add, p, v))
+                if np in points:
+                    gph[p].add(np)
+        return gph
+
+    @classmethod
+    def graph_to_plot(cls, gph) -> list:
+        edges = []
+        for u, es in gph.items():
+            u = cls.doubled_to_plot(cls.point_to_doubled(u))
+            for v in es:
+                v = cls.doubled_to_plot(cls.point_to_doubled(v))
+                edges.append((u, v))
+        return edges
 
 
 ####################################################################
@@ -464,9 +495,14 @@ class SquarePoly(PolyShape):
     plot_radius = 1 / ROOT2
 
     @classmethod
+    def doubled_to_plot(cls, d):
+        """Convert to real values for plotting"""
+        return d[1], -d[0]
+
+    @classmethod
     def console_to_plot(cls, doubled_points):
         """Convert to real values for plotting"""
-        return [(p[1], -p[0]) for p in doubled_points]
+        return [cls.doubled_to_plot(p) for p in doubled_points]
 
     @classmethod
     def normalise_position(cls, points, ref):
@@ -536,12 +572,17 @@ class HexagonPoly(PolyShape):
     symmetry = 6
 
     plot_radius = 2.0 / 3.0
-    plot_facecolor = "blue"
+    plot_facecolor = "lightgreen"
+
+    @classmethod
+    def doubled_to_plot(cls, d):
+        """Convert to real values for plotting"""
+        return (2 * d[1] * R3O2 / 3), -d[0]
 
     @classmethod
     def console_to_plot(cls, doubled_points):
         """Convert to real values for plotting"""
-        return [((2 * p[1] * R3O2 / 3), -p[0]) for p in doubled_points]
+        return [cls.doubled_to_plot(p) for p in doubled_points]
 
     @classmethod
     def point_to_doubled(cls, p):
