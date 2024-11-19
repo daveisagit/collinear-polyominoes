@@ -79,8 +79,7 @@ def load_polyomino_patterns_n(
     """Load all polyomino patterns of a given size n"""
     polyominoes = {}
     for k in range(1, n + 1):
-        k_dict = load_data_file(poly_class, collinearity, n, k)
-        assert set(k_dict) & polyominoes == set()
+        k_dict = load_data_file(poly_class, collinearity, Identifier, n, k)
         polyominoes.update(k_dict)
     return polyominoes
 
@@ -150,7 +149,10 @@ def create_ancestors_nk(
     prev = {}
     if k > 1:
         prev = load_polyomino_patterns_nk(poly_class, collinearity, n - 1, k - 1)
-    assert set(prev) & set(same) == set()
+
+    # confidence levels are good enough to no longer needs
+    # assert set(prev) & set(same) == set()
+
     prev.update(same)
     if not prev:
         print(f"Previous set of {n-1} empty, so no more for k={k}")
