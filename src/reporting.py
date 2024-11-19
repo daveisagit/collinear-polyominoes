@@ -1,8 +1,8 @@
 """Functions for reporting"""
 
 from collections import defaultdict
-from classes import Ancestor, CollinearityType, PolyShape, get_row_count
-from generation import load_ancestors_nk, load_polyomino_patterns_nk
+from classes import Ancestor, CollinearityType, Identifier, PolyShape, get_row_count
+from generation import load_ancestors_nk, load_data_file, load_polyomino_patterns_nk
 from utils import reverse_dag
 
 
@@ -129,3 +129,14 @@ def descendant_groups(poly_class: PolyShape, collinearity: CollinearityType, n, 
     }
 
     return descendants_to_n1k0, descendants_to_n1k1
+
+
+def load_polyomino_patterns_n_le_k(
+    poly_class: PolyShape, collinearity: CollinearityType, n: int, k: int
+):
+    """Load all polyomino patterns of a given size n"""
+    polyominoes = {}
+    for k in range(1, k + 1):
+        k_dict = load_data_file(poly_class, collinearity, Identifier, n, k)
+        polyominoes.update(k_dict)
+    return polyominoes
