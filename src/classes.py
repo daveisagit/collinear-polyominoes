@@ -336,6 +336,29 @@ class PolyShape:
         return tuple(cls.flip_point(p) for p in points)
 
     @classmethod
+    def rotate_points(cls, points):
+        """Returns points rotated"""
+        points = tuple(cls.rotate_point(p) for p in points)
+        return points
+
+    @classmethod
+    def generate_dihedral_symmetries(cls, points, ref):
+        """Generator for the dihedral symmetries
+        Yields the new set of points and the change to a reference point"""
+
+        def generate_rotations(points, ref):
+            for _ in range(cls.symmetry):
+                points, ref = cls.normalise_position(points, ref)
+                yield points, ref
+                points = cls.rotate_points(points)
+                ref = cls.rotate_point(ref)
+
+        yield from generate_rotations(points, ref)
+        points = cls.flip_points(points)
+        ref = cls.flip_point(ref)
+        yield from generate_rotations(points, ref)
+
+    @classmethod
     def get_pattern_id(cls, new_pattern: frozenset, ref):
         """Given a pattern return its id.
         This is done by finding a preferred orientation and encoding the layout
@@ -522,32 +545,9 @@ class SquarePoly(PolyShape):
         return -p[0], p[1]
 
     @classmethod
-    def rotate_point_90_ACW_about_origin(cls, p):
+    def rotate_point(cls, p):
         """Rotate 90 ACW"""
         return -p[1], p[0]
-
-    @classmethod
-    def rotate_points_90_ACW(cls, points):
-        """Returns points rotated 60 ACW about the origin"""
-        points = tuple(cls.rotate_point_90_ACW_about_origin(p) for p in points)
-        return points
-
-    @classmethod
-    def generate_dihedral_symmetries(cls, points, ref):
-        """Generator for the 8 dihedral symmetries
-        Yields the new set of points and the change to a reference point"""
-
-        def generate_rotations(points, ref):
-            for _ in range(4):
-                points, ref = cls.normalise_position(points, ref)
-                yield points, ref
-                points = cls.rotate_points_90_ACW(points)
-                ref = cls.rotate_point_90_ACW_about_origin(ref)
-
-        yield from generate_rotations(points, ref)
-        points = cls.flip_points(points)
-        ref = cls.flip_point(ref)
-        yield from generate_rotations(points, ref)
 
 
 #
@@ -629,29 +629,6 @@ class HexagonPoly(PolyShape):
         return p[2], p[1], p[0]
 
     @classmethod
-    def rotate_point_60_ACW_about_origin(cls, p):
+    def rotate_point(cls, p):
         """Shift coordinates right and x-1"""
         return tuple(-p[(i - 1) % 3] for i in range(3))
-
-    @classmethod
-    def rotate_points_60_ACW(cls, points):
-        """Returns points rotated 60 ACW about the origin"""
-        points = tuple(cls.rotate_point_60_ACW_about_origin(p) for p in points)
-        return points
-
-    @classmethod
-    def generate_dihedral_symmetries(cls, points, ref):
-        """Generator for the 12 dihedral symmetries
-        Yields the new set of points and the change to a reference point"""
-
-        def generate_rotations(points, ref):
-            for _ in range(6):
-                points, ref = cls.normalise_position(points, ref)
-                yield points, ref
-                points = cls.rotate_points_60_ACW(points)
-                ref = cls.rotate_point_60_ACW_about_origin(ref)
-
-        yield from generate_rotations(points, ref)
-        points = cls.flip_points(points)
-        ref = cls.flip_point(ref)
-        yield from generate_rotations(points, ref)
