@@ -272,17 +272,18 @@ class PolyShape:
                 facecolor=cls.plot_facecolor,
                 alpha=0.5,
                 edgecolor="k",
+                zorder=0,
             )
             ax.add_patch(cell)
 
         # Also add scatter points in cell centres
         X = [p[0] for p in plot_points]
         Y = [p[1] for p in plot_points]
-        ax.scatter(X, Y, c="k", s=marker_scale)
+        ax.scatter(X, Y, c="k", s=marker_scale * 2, zorder=20)
 
         # optional graph
         if edges:
-            lc = LineCollection(edges)
+            lc = LineCollection(edges, linewidth=3, zorder=10)
             ax.add_collection(lc)
 
         if to_file and id:
@@ -516,6 +517,7 @@ class SquarePoly(PolyShape):
 
     plot_orientation = radians(45)
     plot_radius = 1 / ROOT2
+    plot_facecolor = "peru"
 
     @classmethod
     def doubled_to_plot(cls, d):

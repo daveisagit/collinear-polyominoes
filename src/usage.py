@@ -52,4 +52,22 @@ def example_visual_on_console():
 
 def example_visual_using_matplotlib():
     """Visualise a polyomino in the console"""
-    SquarePoly.plot("112-28-7-44-56", to_file=False)
+    # SquarePoly.plot("112-28-7-44-56", to_file=False)
+    # SquarePoly.plot("14-12-7-2", to_file=False)
+    # HexagonPoly.plot("1344-42-336", to_file=False)
+    # HexagonPoly.plot("5376-2688-336-8", to_file=False)
+    # SquarePoly.plot("28-24-14-6", to_file=False)
+
+    # Isaac
+    # HexagonPoly.plot(
+    #     "327680-32768-65792-133632-65808-131616-262464-164352-21504", to_file=False
+    # )
+
+    # Elliott
+    # HexagonPoly.plot(
+    #     "262144-532480-1130496-655392-1048896-2097696-1053696-663552-81920",
+    #     to_file=False,
+    # )
+
+
+example_visual_using_matplotlib()
