@@ -69,5 +69,10 @@ def example_visual_using_matplotlib():
     #     to_file=False,
     # )
 
+    # Dots on a Tiling
+    # HexagonPoly.plot("136-69-32", to_file=False)
+    # HexagonPoly.plot("32-85-128", to_file=False)
+    # HexagonPoly.plot("162-21-32", to_file=False)
+
 
 example_visual_using_matplotlib()
